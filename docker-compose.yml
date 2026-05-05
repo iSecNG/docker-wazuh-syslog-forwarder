@@ -1,7 +1,10 @@
 services:
   syslog-forwarder:
-    build: .
-    image: wazuh-syslog-forwarder:4.14.2
+    build:
+      context: .
+      args:
+        WAZUH_VERSION: ${WAZUH_VERSION:-4.14.2}
+    image: wazuh-syslog-forwarder:${WAZUH_VERSION:-4.14.2}
     restart: unless-stopped
     ports:
       - "${SYSLOG_PORT:-5514}:514/udp"
@@ -14,8 +17,18 @@ services:
     environment:
       - WAZUH_MANAGER
       - WAZUH_MANAGER_PORT
+      - WAZUH_PROTOCOL
+      - WAZUH_REGISTRATION_SERVER
+      - WAZUH_REGISTRATION_PORT
+      - WAZUH_REGISTRATION_PASSWORD
       - WAZUH_AGENT_NAME
+      - WAZUH_AGENT_GROUP
       - WAZUH_AGENT_KEY
+      - WAZUH_KEEP_ALIVE_INTERVAL
+      - WAZUH_TIME_RECONNECT
+      - WAZUH_REGISTRATION_CA
+      - WAZUH_REGISTRATION_CERTIFICATE
+      - WAZUH_REGISTRATION_KEY
 
 volumes:
   syslog_remote_logs:
