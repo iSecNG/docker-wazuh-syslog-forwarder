@@ -4,10 +4,11 @@ services:
     image: wazuh-syslog-forwarder:4.14.2
     restart: unless-stopped
     ports:
-      - "5514:514/udp"
-      - "5514:514/tcp"
+      - "${SYSLOG_PORT:-5514}:514/udp"
+      - "${SYSLOG_PORT:-5514}:514/tcp"
     volumes:
       - syslog_remote_logs:/var/log/remote
+      - ${RSYSLOG_CONFIG_DIR:-./config/rsyslog.d}:/etc/rsyslog.d:ro
     extra_hosts:
       - "wazuh-manager:host-gateway"
     environment:

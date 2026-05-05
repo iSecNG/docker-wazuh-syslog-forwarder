@@ -9,31 +9,92 @@ Both rsyslog and the Wazuh agent run inside a single container. The Wazuh agent 
 
 ## Configuration
 
-Environment variables for the `syslog-forwarder` service:
+Configuration is split across two files:
 
-| Variable | Default | Description |
-|---|---|---|
-| `WAZUH_MANAGER` | *(required)* | Hostname or IP of the Wazuh manager |
-| `WAZUH_MANAGER_PORT` | `1514` | Wazuh agent connection port |
-| `WAZUH_AGENT_NAME` | `syslog-forwarder` | Agent name shown in the Wazuh dashboard |
-| `WAZUH_AGENT_KEY` | *(unset)* | Pre-registered agent key — skips auto-enrollment if set |
+**Root `.env`** — shared across all instances (gitignored, not committed):
+
+| Variable | Description |
+|---|---|
+| `WAZUH_MANAGER` | Hostname or IP of the Wazuh manager |
+| `WAZUH_MANAGER_PORT` | Wazuh agent connection port (default: `1514`) |
+
+**`instances/<name>/.env`** — per-instance settings:
+
+| Variable | Description |
+|---|---|
+| `SYSLOG_PORT` | Host port to receive syslog on (must be unique per instance) |
+| `WAZUH_AGENT_NAME` | Agent name shown in the Wazuh dashboard (must be unique per instance) |
+| `WAZUH_AGENT_KEY` | Optional: pre-registered agent key — skips auto-enrollment if set |
+
+**`instances/<name>/rsyslog.d/`** — optional per-instance rsyslog config directory. If present, `spawn.sh` mounts it over `/etc/rsyslog.d/` in the container, replacing the shared default. If absent, the shared `config/rsyslog.d/` is used. See `instances/example/rsyslog.d/remote.conf` for the default as a starting point.
 
 The default `docker-compose.yml` uses `extra_hosts: wazuh-manager:host-gateway` so the container reaches the host's Wazuh manager without host networking.
 
 ## Usage
 
-### Build and start
+### Single instance
 
 ```bash
 docker compose build
 docker compose up -d
-```
-
-On first start the Wazuh agent auto-enrolls with the manager (takes ~20-30 seconds). Watch the logs:
-
-```bash
 docker compose logs -f syslog-forwarder
 ```
+
+### Multiple instances in parallel
+
+Each instance lives in its own directory under `instances/`. The `spawn.sh` wrapper sets the Compose project name and env file, so every instance gets an isolated port, agent name, and volume.
+
+**1. Create an instance config:**
+
+```bash
+cp -r instances/example instances/my-instance
+# edit instances/my-instance/.env — set a unique SYSLOG_PORT and WAZUH_AGENT_NAME
+# optionally edit instances/my-instance/rsyslog.d/remote.conf for custom syslog handling
+# or remove instances/my-instance/rsyslog.d/ entirely to use the shared default
+```
+
+**2. Start it:**
+
+```bash
+./spawn.sh my-instance up -d
+```
+
+**3. Run any Compose command against a specific instance:**
+
+```bash
+./spawn.sh my-instance logs -f
+./spawn.sh my-instance down
+./spawn.sh my-instance down -v   # also removes the volume
+```
+
+**Example: two instances running side by side**
+
+`.env` (root, shared):
+```
+WAZUH_MANAGER=wazuh-manager
+WAZUH_MANAGER_PORT=1514
+```
+
+`instances/dmz/.env`:
+```
+SYSLOG_PORT=5514
+WAZUH_AGENT_NAME=syslog-dmz
+```
+
+`instances/corp/.env`:
+```
+SYSLOG_PORT=5515
+WAZUH_AGENT_NAME=syslog-corp
+```
+
+```bash
+./spawn.sh dmz up -d
+./spawn.sh corp up -d
+```
+
+Each instance gets its own Docker volume (`syslog-dmz_syslog_remote_logs`, `syslog-corp_syslog_remote_logs`) and appears as a separate agent in the Wazuh dashboard.
+
+> The root `.env` + `docker compose` (no `spawn.sh`) still works for a single default instance.
 
 ### Send test syslog messages
 
