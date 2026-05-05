@@ -9,14 +9,24 @@ Both rsyslog and the Wazuh agent run inside a single container. The Wazuh agent 
 
 ## Configuration
 
-Configuration is split across two files:
+Configuration is split across two files. Copy `.env.example` to `.env` and fill in the values.
 
 **Root `.env`** — shared across all instances (gitignored, not committed):
 
-| Variable | Description |
-|---|---|
-| `WAZUH_MANAGER` | Hostname or IP of the Wazuh manager |
-| `WAZUH_MANAGER_PORT` | Wazuh agent connection port (default: `1514`) |
+| Variable | Default | Description |
+|---|---|---|
+| `WAZUH_VERSION` | `4.14.2` | Agent version — must match the manager |
+| `WAZUH_MANAGER` | *(required)* | Hostname or IP of the Wazuh manager |
+| `WAZUH_MANAGER_PORT` | `1514` | Agent communication port |
+| `WAZUH_PROTOCOL` | `tcp` | Agent protocol (`tcp` or `udp`) |
+| `WAZUH_REGISTRATION_SERVER` | `WAZUH_MANAGER` | Enrollment server (if different from manager) |
+| `WAZUH_REGISTRATION_PORT` | `1515` | Enrollment port |
+| `WAZUH_REGISTRATION_PASSWORD` | *(unset)* | Enrollment password |
+| `WAZUH_KEEP_ALIVE_INTERVAL` | `10` | Seconds between manager keep-alive checks |
+| `WAZUH_TIME_RECONNECT` | `60` | Seconds before reconnect attempt |
+| `WAZUH_REGISTRATION_CA` | *(unset)* | CA cert path inside the container |
+| `WAZUH_REGISTRATION_CERTIFICATE` | *(unset)* | Agent cert path inside the container |
+| `WAZUH_REGISTRATION_KEY` | *(unset)* | Agent key path inside the container |
 
 **`instances/<name>/.env`** — per-instance settings:
 
@@ -24,11 +34,12 @@ Configuration is split across two files:
 |---|---|
 | `SYSLOG_PORT` | Host port to receive syslog on (must be unique per instance) |
 | `WAZUH_AGENT_NAME` | Agent name shown in the Wazuh dashboard (must be unique per instance) |
+| `WAZUH_AGENT_GROUP` | Optional: comma-separated Wazuh group names |
 | `WAZUH_AGENT_KEY` | Optional: pre-registered agent key — skips auto-enrollment if set |
 
 **`instances/<name>/rsyslog.d/`** — optional per-instance rsyslog config directory. If present, `spawn.sh` mounts it over `/etc/rsyslog.d/` in the container, replacing the shared default. If absent, the shared `config/rsyslog.d/` is used. See `instances/example/rsyslog.d/remote.conf` for the default as a starting point.
 
-The default `docker-compose.yml` uses `extra_hosts: wazuh-manager:host-gateway` so the container reaches the host's Wazuh manager without host networking.
+> When using a local Wazuh manager running in Docker, set `WAZUH_MANAGER=wazuh-manager` — the compose file maps that hostname to the host's bridge gateway via `extra_hosts`. For remote managers set the hostname or IP directly.
 
 ## Usage
 
@@ -81,8 +92,12 @@ The `all` target discovers every folder under `instances/` that contains a `.env
 
 `.env` (root, shared):
 ```
-WAZUH_MANAGER=wazuh-manager
+WAZUH_VERSION=4.14.5
+WAZUH_MANAGER=wazuh.example.com
 WAZUH_MANAGER_PORT=1514
+WAZUH_REGISTRATION_PORT=1515
+WAZUH_REGISTRATION_PASSWORD=secret
+WAZUH_PROTOCOL=tcp
 ```
 
 `instances/dmz/.env`:
@@ -95,6 +110,7 @@ WAZUH_AGENT_NAME=syslog-dmz
 ```
 SYSLOG_PORT=5515
 WAZUH_AGENT_NAME=syslog-corp
+WAZUH_AGENT_GROUP=corp,linux
 ```
 
 ```bash
