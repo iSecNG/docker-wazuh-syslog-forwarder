@@ -1,0 +1,30 @@
+<!--
+  Wazuh decoder for messages produced by test/send_syslog.py.
+
+  Matches syslog lines with tag "test" forwarded by the syslog-forwarder agent.
+  Wazuh's built-in syslog pre-decoder handles timestamp/hostname/program_name;
+  these decoders parse the message body.
+
+  Deploy to the Wazuh manager and restart:
+    docker cp test/decoder_test_syslog.xml single-node-wazuh.manager-1:/var/ossec/etc/decoders/
+    docker exec single-node-wazuh.manager-1 /var/ossec/bin/wazuh-control restart
+-->
+
+<!-- Parent: match on program name "test" (the --tag value from send_syslog.py) -->
+<decoder name="test-syslog-sender">
+  <program_name>^test$</program_name>
+</decoder>
+
+<!-- Single message (--count 1): no counter suffix -->
+<decoder name="test-syslog-sender-single">
+  <parent>test-syslog-sender</parent>
+  <prematch>^Test syslog message from send_syslog\.py$</prematch>
+</decoder>
+
+<!-- Multi-message (--count N>1): "Test syslog message from send_syslog.py [N/M]" -->
+<decoder name="test-syslog-sender-multi">
+  <parent>test-syslog-sender</parent>
+  <prematch>^Test syslog message from send_syslog\.py [</prematch>
+  <regex>^Test syslog message from send_syslog\.py [(\d+)/(\d+)]</regex>
+  <order>msg_index,msg_total</order>
+</decoder>

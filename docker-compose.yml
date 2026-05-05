@@ -1,0 +1,20 @@
+services:
+  syslog-forwarder:
+    build: .
+    image: wazuh-syslog-forwarder:4.14.2
+    restart: unless-stopped
+    ports:
+      - "5514:514/udp"
+      - "5514:514/tcp"
+    volumes:
+      - syslog_remote_logs:/var/log/remote
+    extra_hosts:
+      - "wazuh-manager:host-gateway"
+    environment:
+      - WAZUH_MANAGER
+      - WAZUH_MANAGER_PORT
+      - WAZUH_AGENT_NAME
+      - WAZUH_AGENT_KEY
+
+volumes:
+  syslog_remote_logs:
