@@ -15,7 +15,7 @@ Configuration is split across two files. Copy `.env.example` to `.env` and fill 
 
 | Variable | Default | Description |
 |---|---|---|
-| `WAZUH_VERSION` | `4.14.2` | Agent version — must match the manager |
+| `WAZUH_VERSION` | `4.14.5` | Agent version — must match the manager |
 | `WAZUH_MANAGER` | *(required)* | Hostname or IP of the Wazuh manager |
 | `WAZUH_MANAGER_PORT` | `1514` | Agent communication port |
 | `WAZUH_PROTOCOL` | `tcp` | Agent protocol (`tcp` or `udp`) |
