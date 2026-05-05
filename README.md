@@ -67,6 +67,16 @@ cp -r instances/example instances/my-instance
 ./spawn.sh my-instance down -v   # also removes the volume
 ```
 
+**4. Run a Compose command across all instances at once:**
+
+```bash
+./spawn.sh all up -d     # start every instance
+./spawn.sh all down      # stop every instance
+./spawn.sh all pull      # pull updated images for all instances
+```
+
+The `all` target discovers every folder under `instances/` that contains a `.env` file, skipping the `example` template.
+
 **Example: two instances running side by side**
 
 `.env` (root, shared):
