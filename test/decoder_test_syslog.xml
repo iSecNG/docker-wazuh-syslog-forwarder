@@ -10,18 +10,18 @@
     docker exec single-node-wazuh.manager-1 /var/ossec/bin/wazuh-control restart
 -->
 
-<!-- Parent: match on program name "test" (the --tag value from send_syslog.py) -->
+<!-- Parent: match on program name "test" (the tag value from send_syslog.py) -->
 <decoder name="test-syslog-sender">
   <program_name>^test$</program_name>
 </decoder>
 
-<!-- Single message (--count 1): no counter suffix -->
+<!-- Single message (count 1): no counter suffix -->
 <decoder name="test-syslog-sender-single">
   <parent>test-syslog-sender</parent>
   <prematch>^Test syslog message from send_syslog\.py$</prematch>
 </decoder>
 
-<!-- Multi-message (--count N>1): "Test syslog message from send_syslog.py [N/M]" -->
+<!-- Multi-message (count N>1): "Test syslog message from send_syslog.py [N/M]" -->
 <decoder name="test-syslog-sender-multi">
   <parent>test-syslog-sender</parent>
   <prematch>^Test syslog message from send_syslog\.py [</prematch>

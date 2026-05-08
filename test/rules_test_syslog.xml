@@ -11,19 +11,19 @@
 
 <group name="test_syslog,">
 
-  <!-- Fallback: tag "test" matched parent decoder but no child (custom --message) -->
+  <!-- Fallback: tag "test" matched parent decoder but no child (custom message) -->
   <rule id="100100" level="3">
     <decoded_as>test-syslog-sender</decoded_as>
     <description>Test syslog message received (tag: test)</description>
   </rule>
 
-  <!-- Single message: send_syslog.py with --count 1 (no [N/M] suffix) -->
+  <!-- Single message: send_syslog.py with count 1 (no [N/M] suffix) -->
   <rule id="100101" level="3">
     <decoded_as>test-syslog-sender-single</decoded_as>
     <description>Test syslog single message received from send_syslog.py</description>
   </rule>
 
-  <!-- Batch message: send_syslog.py with --count N>1, includes [N/M] counter -->
+  <!-- Batch message: send_syslog.py with count N>1, includes [N/M] counter -->
   <rule id="100102" level="3">
     <decoded_as>test-syslog-sender-multi</decoded_as>
     <description>Test syslog batch message received from send_syslog.py ($(msg_index)/$(msg_total))</description>
