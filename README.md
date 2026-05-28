@@ -173,3 +173,22 @@ docker exec single-node-wazuh.manager-1 /var/ossec/bin/wazuh-control restart
 docker compose down           # stop containers, keep volume
 docker compose down -v        # stop containers and delete log volume
 ```
+
+## License
+
+This project is licensed under the **Business Source License 1.1** (BUSL-1.1).
+
+- Free to use for personal/non-commercial use, non-profit organizations, and customers of iSecNG GmbH under a current service agreement.
+- Commercial use by other entities requires a separate license.
+- On **2030-05-05** the license converts to the **Apache License 2.0**.
+
+See [LICENSE](LICENSE) for the full terms or contact [sales@isecng.de](mailto:sales@isecng.de) for commercial licensing.
+
+## Credits
+
+This project builds on the following open-source software:
+
+- **[Wazuh](https://wazuh.com/)** — open-source security platform providing the agent used to forward logs to the Wazuh manager. Licensed under the GNU General Public License v2.0.
+- **[rsyslog](https://www.rsyslog.com/)** — high-performance syslog processing daemon used to receive and store incoming log messages. Licensed under the GNU General Public License v3.0 / Apache License 2.0 (dual-licensed).
+- **[Ubuntu](https://ubuntu.com/)** — base container image. Trademarks of Canonical Ltd.
+- **[Docker](https://www.docker.com/)** — container runtime and Compose tooling used for deployment.
