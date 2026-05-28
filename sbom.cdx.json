@@ -1,0 +1,341 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-05-28T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "iSecNG GmbH",
+        "name": "manual",
+        "version": "1.0"
+      }
+    ],
+    "authors": [
+      {
+        "name": "iSecNG GmbH",
+        "email": "sales@isecng.de"
+      }
+    ],
+    "component": {
+      "type": "container",
+      "bom-ref": "docker-wazuh-syslog-forwarder",
+      "name": "docker-wazuh-syslog-forwarder",
+      "version": "1.0.0",
+      "description": "Receives remote syslog (UDP/TCP), stores logs to a persistent Docker volume, and forwards them to a Wazuh manager via an in-container Wazuh agent.",
+      "licenses": [
+        {
+          "license": {
+            "id": "BUSL-1.1",
+            "url": "https://spdx.org/licenses/BUSL-1.1.html"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/isecng/docker-wazuh-syslog-forwarder",
+          "comment": "Source repository"
+        }
+      ],
+      "properties": [
+        {
+          "name": "git:commit",
+          "value": "ebf3df96634a938636f0abd3b0e7b647c3576d0f"
+        },
+        {
+          "name": "licensor",
+          "value": "iSecNG GmbH"
+        },
+        {
+          "name": "license:changeDate",
+          "value": "2030-05-05"
+        },
+        {
+          "name": "license:changeLicense",
+          "value": "Apache-2.0"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "container",
+      "bom-ref": "ubuntu-22.04",
+      "name": "ubuntu",
+      "version": "22.04",
+      "description": "Base container image (Ubuntu Jammy Jellyfish).",
+      "supplier": {
+        "name": "Canonical Ltd."
+      },
+      "licenses": [
+        {
+          "expression": "GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT AND Apache-2.0"
+        }
+      ],
+      "purl": "pkg:oci/ubuntu@sha256:latest?repository_url=docker.io/library/ubuntu&tag=22.04",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://ubuntu.com/"
+        },
+        {
+          "type": "distribution",
+          "url": "https://hub.docker.com/_/ubuntu"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "wazuh-agent-4.14.5",
+      "name": "wazuh-agent",
+      "version": "4.14.5",
+      "description": "Wazuh security agent — forwards log events to the Wazuh manager.",
+      "supplier": {
+        "name": "Wazuh, Inc."
+      },
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only",
+            "url": "https://spdx.org/licenses/GPL-2.0-only.html"
+          }
+        }
+      ],
+      "purl": "pkg:deb/wazuh/wazuh-agent@4.14.5-1",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://wazuh.com/"
+        },
+        {
+          "type": "distribution",
+          "url": "https://packages.wazuh.com/4.x/apt/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/wazuh/wazuh"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "rsyslog",
+      "name": "rsyslog",
+      "description": "Rocket-fast syslog processing daemon — receives and routes incoming syslog messages to per-host log files.",
+      "supplier": {
+        "name": "Adiscon GmbH"
+      },
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-3.0-or-later",
+            "url": "https://spdx.org/licenses/GPL-3.0-or-later.html"
+          }
+        }
+      ],
+      "purl": "pkg:deb/ubuntu/rsyslog",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://www.rsyslog.com/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/rsyslog/rsyslog"
+        }
+      ],
+      "properties": [
+        {
+          "name": "version:note",
+          "value": "Version not pinned in Dockerfile; resolved from Ubuntu 22.04 apt repository at build time. Generate a runtime SBOM from the built image for the exact version."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "curl",
+      "name": "curl",
+      "description": "Command-line tool and library for transferring data — used in the Dockerfile to fetch the Wazuh GPG key.",
+      "licenses": [
+        {
+          "license": {
+            "id": "curl",
+            "url": "https://spdx.org/licenses/curl.html"
+          }
+        }
+      ],
+      "purl": "pkg:deb/ubuntu/curl",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://curl.se/"
+        }
+      ],
+      "properties": [
+        {
+          "name": "version:note",
+          "value": "Version not pinned; resolved from Ubuntu 22.04 apt repository at build time."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "gnupg",
+      "name": "gnupg",
+      "description": "GNU Privacy Guard — used to import and verify the Wazuh APT repository signing key.",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-3.0-or-later",
+            "url": "https://spdx.org/licenses/GPL-3.0-or-later.html"
+          }
+        }
+      ],
+      "purl": "pkg:deb/ubuntu/gnupg",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://gnupg.org/"
+        }
+      ],
+      "properties": [
+        {
+          "name": "version:note",
+          "value": "Version not pinned; resolved from Ubuntu 22.04 apt repository at build time."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "ca-certificates",
+      "name": "ca-certificates",
+      "description": "Common CA certificates — enables TLS verification for outbound connections.",
+      "licenses": [
+        {
+          "expression": "GPL-2.0-or-later AND MPL-2.0"
+        }
+      ],
+      "purl": "pkg:deb/ubuntu/ca-certificates",
+      "properties": [
+        {
+          "name": "version:note",
+          "value": "Version not pinned; resolved from Ubuntu 22.04 apt repository at build time."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "apt-transport-https",
+      "name": "apt-transport-https",
+      "description": "APT transport for HTTPS — allows apt to fetch packages over HTTPS (required for the Wazuh repository).",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-or-later"
+          }
+        }
+      ],
+      "purl": "pkg:deb/ubuntu/apt-transport-https",
+      "properties": [
+        {
+          "name": "version:note",
+          "value": "Version not pinned; resolved from Ubuntu 22.04 apt repository at build time."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "lsb-release",
+      "name": "lsb-release",
+      "description": "Linux Standard Base release identification — used during Wazuh repository setup.",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-or-later"
+          }
+        }
+      ],
+      "purl": "pkg:deb/ubuntu/lsb-release",
+      "properties": [
+        {
+          "name": "version:note",
+          "value": "Version not pinned; resolved from Ubuntu 22.04 apt repository at build time."
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "procps",
+      "name": "procps",
+      "description": "Process monitoring utilities (ps, kill) — used in entrypoint.sh to manage agent and rsyslog processes.",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-or-later"
+          }
+        }
+      ],
+      "purl": "pkg:deb/ubuntu/procps",
+      "properties": [
+        {
+          "name": "version:note",
+          "value": "Version not pinned; resolved from Ubuntu 22.04 apt repository at build time."
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "docker-wazuh-syslog-forwarder",
+      "dependsOn": [
+        "ubuntu-22.04",
+        "wazuh-agent-4.14.5",
+        "rsyslog",
+        "curl",
+        "gnupg",
+        "ca-certificates",
+        "apt-transport-https",
+        "lsb-release",
+        "procps"
+      ]
+    },
+    {
+      "ref": "ubuntu-22.04",
+      "dependsOn": []
+    },
+    {
+      "ref": "wazuh-agent-4.14.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "rsyslog",
+      "dependsOn": []
+    },
+    {
+      "ref": "curl",
+      "dependsOn": []
+    },
+    {
+      "ref": "gnupg",
+      "dependsOn": []
+    },
+    {
+      "ref": "ca-certificates",
+      "dependsOn": []
+    },
+    {
+      "ref": "apt-transport-https",
+      "dependsOn": []
+    },
+    {
+      "ref": "lsb-release",
+      "dependsOn": []
+    },
+    {
+      "ref": "procps",
+      "dependsOn": []
+    }
+  ]
+}
