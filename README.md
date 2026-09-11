@@ -36,6 +36,7 @@ Configuration is split across two files. Copy `.env.example` to `.env` and fill 
 | `WAZUH_AGENT_NAME` | Agent name shown in the Wazuh dashboard (must be unique per instance) |
 | `WAZUH_AGENT_GROUP` | Optional: comma-separated Wazuh group names |
 | `WAZUH_AGENT_KEY` | Optional: pre-registered agent key — skips auto-enrollment if set |
+| `WAZUH_AGENT_LABELS` | Optional: extra fields added to every event from this container, `key=value,key2=value2` — appear as `agent.labels.*` in alerts. Dot-separated keys nest (`device.type` → `agent.labels.device.type`) |
 
 **`instances/<name>/rsyslog.d/`** — optional per-instance rsyslog config directory. If present, `spawn.sh` mounts it over `/etc/rsyslog.d/` in the container, replacing the shared default. If absent, the shared `config/rsyslog.d/` is used. See `instances/example/rsyslog.d/remote.conf` for the default as a starting point.
 
