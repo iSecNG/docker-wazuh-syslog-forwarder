@@ -192,3 +192,5 @@ This project builds on the following open-source software:
 - **[rsyslog](https://www.rsyslog.com/)** — high-performance syslog processing daemon used to receive and store incoming log messages. Licensed under the GNU General Public License v3.0 / Apache License 2.0 (dual-licensed).
 - **[Ubuntu](https://ubuntu.com/)** — base container image. Trademarks of Canonical Ltd.
 - **[Docker](https://www.docker.com/)** — container runtime and Compose tooling used for deployment.
+
+Claude was partly used to create / test / quality assure this project. Every line of code was at least double-checked by a human.
