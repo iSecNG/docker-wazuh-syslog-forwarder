@@ -15,7 +15,7 @@ Configuration is split across two files. Copy `.env.example` to `.env` and fill 
 
 | Variable | Default | Description |
 |---|---|---|
-| `WAZUH_VERSION` | `4.14.5` | Agent version — must match the manager |
+| `WAZUH_VERSION` | `4.14.7` | Agent version — must match the manager |
 | `WAZUH_MANAGER` | *(required)* | Hostname or IP of the Wazuh manager |
 | `WAZUH_MANAGER_PORT` | `1514` | Agent communication port |
 | `WAZUH_PROTOCOL` | `tcp` | Agent protocol (`tcp` or `udp`) |
@@ -93,7 +93,7 @@ The `all` target discovers every folder under `instances/` that contains a `.env
 
 `.env` (root, shared):
 ```
-WAZUH_VERSION=4.14.5
+WAZUH_VERSION=4.14.7
 WAZUH_MANAGER=wazuh.example.com
 WAZUH_MANAGER_PORT=1514
 WAZUH_REGISTRATION_PORT=1515
