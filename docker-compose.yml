@@ -3,8 +3,8 @@ services:
     build:
       context: .
       args:
-        WAZUH_VERSION: ${WAZUH_VERSION:-4.14.5}
-    image: wazuh-syslog-forwarder:${WAZUH_VERSION:-4.14.5}
+        WAZUH_VERSION: ${WAZUH_VERSION:-4.14.7}
+    image: wazuh-syslog-forwarder:${WAZUH_VERSION:-4.14.7}
     restart: unless-stopped
     ports:
       - "${SYSLOG_PORT:-5514}:514/udp"
@@ -24,6 +24,7 @@ services:
       - WAZUH_AGENT_NAME
       - WAZUH_AGENT_GROUP
       - WAZUH_AGENT_KEY
+      - WAZUH_AGENT_LABELS
       - WAZUH_KEEP_ALIVE_INTERVAL
       - WAZUH_TIME_RECONNECT
       - WAZUH_REGISTRATION_CA

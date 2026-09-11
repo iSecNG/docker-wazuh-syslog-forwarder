@@ -15,7 +15,7 @@ Configuration is split across two files. Copy `.env.example` to `.env` and fill 
 
 | Variable | Default | Description |
 |---|---|---|
-| `WAZUH_VERSION` | `4.14.5` | Agent version — must match the manager |
+| `WAZUH_VERSION` | `4.14.7` | Agent version — must match the manager |
 | `WAZUH_MANAGER` | *(required)* | Hostname or IP of the Wazuh manager |
 | `WAZUH_MANAGER_PORT` | `1514` | Agent communication port |
 | `WAZUH_PROTOCOL` | `tcp` | Agent protocol (`tcp` or `udp`) |
@@ -36,6 +36,7 @@ Configuration is split across two files. Copy `.env.example` to `.env` and fill 
 | `WAZUH_AGENT_NAME` | Agent name shown in the Wazuh dashboard (must be unique per instance) |
 | `WAZUH_AGENT_GROUP` | Optional: comma-separated Wazuh group names |
 | `WAZUH_AGENT_KEY` | Optional: pre-registered agent key — skips auto-enrollment if set |
+| `WAZUH_AGENT_LABELS` | Optional: extra fields added to every event from this container, `key=value,key2=value2` — appear as `agent.labels.*` in alerts. Dot-separated keys nest (`device.type` → `agent.labels.device.type`) |
 
 **`instances/<name>/rsyslog.d/`** — optional per-instance rsyslog config directory. If present, `spawn.sh` mounts it over `/etc/rsyslog.d/` in the container, replacing the shared default. If absent, the shared `config/rsyslog.d/` is used. See `instances/example/rsyslog.d/remote.conf` for the default as a starting point.
 
@@ -92,7 +93,7 @@ The `all` target discovers every folder under `instances/` that contains a `.env
 
 `.env` (root, shared):
 ```
-WAZUH_VERSION=4.14.5
+WAZUH_VERSION=4.14.7
 WAZUH_MANAGER=wazuh.example.com
 WAZUH_MANAGER_PORT=1514
 WAZUH_REGISTRATION_PORT=1515
@@ -192,3 +193,5 @@ This project builds on the following open-source software:
 - **[rsyslog](https://www.rsyslog.com/)** — high-performance syslog processing daemon used to receive and store incoming log messages. Licensed under the GNU General Public License v3.0 / Apache License 2.0 (dual-licensed).
 - **[Ubuntu](https://ubuntu.com/)** — base container image. Trademarks of Canonical Ltd.
 - **[Docker](https://www.docker.com/)** — container runtime and Compose tooling used for deployment.
+
+Claude was partly used to create / test / quality assure this project. Every line of code was at least double-checked by a human.

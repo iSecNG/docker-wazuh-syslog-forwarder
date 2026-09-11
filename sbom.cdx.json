@@ -88,9 +88,9 @@
     },
     {
       "type": "application",
-      "bom-ref": "wazuh-agent-4.14.5",
+      "bom-ref": "wazuh-agent-4.14.7",
       "name": "wazuh-agent",
-      "version": "4.14.5",
+      "version": "4.14.7",
       "description": "Wazuh security agent — forwards log events to the Wazuh manager.",
       "supplier": {
         "name": "Wazuh, Inc."
@@ -103,7 +103,7 @@
           }
         }
       ],
-      "purl": "pkg:deb/wazuh/wazuh-agent@4.14.5-1",
+      "purl": "pkg:deb/wazuh/wazuh-agent@4.14.7-1",
       "externalReferences": [
         {
           "type": "website",
@@ -291,7 +291,7 @@
       "ref": "docker-wazuh-syslog-forwarder",
       "dependsOn": [
         "ubuntu-22.04",
-        "wazuh-agent-4.14.5",
+        "wazuh-agent-4.14.7",
         "rsyslog",
         "curl",
         "gnupg",
@@ -306,7 +306,7 @@
       "dependsOn": []
     },
     {
-      "ref": "wazuh-agent-4.14.5",
+      "ref": "wazuh-agent-4.14.7",
       "dependsOn": []
     },
     {

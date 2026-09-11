@@ -3,3 +3,6 @@ instances/**/.env
 !instances/example/.env
 instances/*/rsyslog.d/
 !instances/example/rsyslog.d/
+
+.claude/
+CLAUDE.md

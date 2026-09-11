@@ -30,6 +30,24 @@ else
   sed -i "/<groups>WAZUH_AGENT_GROUP_VAL<\/groups>/d" "$OSSEC_CONF"
 fi
 
+# Optional: custom labels — "key=value,key2=value2" → <label key="key">value</label>
+# Labels are attached to every event this agent sends and show up as agent.labels.*
+if [ -n "${WAZUH_AGENT_LABELS:-}" ]; then
+  : > /tmp/labels.xml
+  printf '%s\n' "${WAZUH_AGENT_LABELS}" | tr ',' '\n' | while IFS='=' read -r key value; do
+    key="${key//[[:space:]]/}"
+    value="${value# }"; value="${value% }"
+    [ -n "$key" ] || continue
+    value="${value//&/&amp;}"
+    value="${value//</&lt;}"
+    printf '    <label key="%s">%s</label>\n' "$key" "$value" >> /tmp/labels.xml
+  done
+  sed -i -e "/WAZUH_AGENT_LABELS_VAL/r /tmp/labels.xml" -e "/WAZUH_AGENT_LABELS_VAL/d" "$OSSEC_CONF"
+  rm -f /tmp/labels.xml
+else
+  sed -i "/<labels>/,/<\/labels>/d" "$OSSEC_CONF"
+fi
+
 # Optional: enrollment password — written to the file ossec.conf references
 if [ -n "${WAZUH_REGISTRATION_PASSWORD:-}" ]; then
   echo "${WAZUH_REGISTRATION_PASSWORD}" > /var/ossec/etc/enrollment-pass
